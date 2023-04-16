@@ -88,3 +88,25 @@ $ python manage.py startapp articles
 - views 함수에 데코레이터 임포트 후 필요한 곳에 사용
 
 `from django.views.decorators.http import require_GET, require_safe, require_POST, require_http_methods`
+
+## articles app - Comment
+
+- Comment 모델 작성
+
+  - content 필드, created_at, updated_at
+
+  - article - comment: 1:N 관계, related_name='comments'
+
+- CommentForm 작성
+
+  - fields 수정
+
+- CRUD
+
+  - detail 페이지에서 CommentForm 출력
+
+  - create_comment 함수 생성
+
+  - detail 페이지 comment 조회
+
+  - 댓글 삭제 구현

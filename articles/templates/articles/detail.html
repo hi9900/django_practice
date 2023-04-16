@@ -9,11 +9,32 @@
 {% endif %}
 <p>{{ article.title }}</p>
 <p>{{ article.content }}</p>
-<a href="{% url 'articles:update' article.pk %}">수정</a>
 <hr>
+<a href="{% url 'articles:update' article.pk %}">수정</a>
 <form action="{% url 'articles:delete' article.pk %}" method="POST">
   {% csrf_token %}
   <input type="submit" value="삭제">
 </form>
+
+<form action="{% url 'articles:create_comments' article.pk %}" method="POST">
+  {% csrf_token %}
+  {{ comment_form }}
+  <input type="submit" value="댓글작성">
+</form>
+{% if comments %}
+<h4>댓글| {{ comments.count }}</h4>
+{% endif %}
+<ul>
+{% for comment in comments %}
+  <li>{{ comment.content }}
+    <form action="{% url 'articles:delete_comments' article.pk comment.pk %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="댓글 삭제">
+    </form>
+  </li>
+{% empty %}
+  <p>댓글이 없어요..</p>
+{% endfor %}
+</ul>
 <a href="{% url 'articles:index' %}">back</a>
 {% endblock content %}
