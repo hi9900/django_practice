@@ -110,3 +110,21 @@ $ python manage.py startapp articles
   - detail 페이지 comment 조회
 
   - 댓글 삭제 구현
+
+## N:1, Article-User
+
+- Article 모델 클래스에 User 참조하는 외래키 작성 후 마이그레이션
+
+- CRUD
+
+  - ArticleForm fields 수정
+
+  - create 함수 수정: 게시글 작성 시 유저 정보 저장
+
+  - delete, update 함수 수정: 게시글 삭제 시 작성자 확인
+
+  - 추가로 해당 게시글의 작성자만 수정/삭제 버튼 볼 수 있게 만들기
+
+  - 게시글 작성자 표시
+
+

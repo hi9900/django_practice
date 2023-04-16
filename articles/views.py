@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 from django.views.decorators.http import require_POST, require_http_methods, require_safe
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -11,12 +12,15 @@ def index(request):
     }
     return render(request, 'articles/index.html', context)
 
-
+@login_required
+@require_http_methods(['GET', 'POST'])
 def create(request):
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES)
         if form.is_valid():
-            article = form.save()
+            article = form.save(commit=False)
+            article.user = request.user
+            article.save()
             return redirect('articles:detail', article.pk)
     else:
         form = ArticleForm()
@@ -40,25 +44,30 @@ def detail(request, pk):
 @require_POST
 def delete(request, pk):
     article = Article.objects.get(pk=pk)
-    article.delete()
-    return redirect('articles:index')
+    if request.user.is_authenticated:
+        if request.user == article.user:
+            article.delete()
+            return redirect('articles:index')
+    return redirect('articles:detail', article.pk)
 
-
+@login_required
+@require_http_methods(['GET', 'POST'])
 def update(request, pk):
     article = Article.objects.get(pk=pk)
-    if request.method == "POST":
-        form = ArticleForm(request.POST, request.FILES, instance=article)
-        if form.is_valid():
-            article = form.save()
-            return redirect('articles:detail', article.pk)
-    else:
-        form = ArticleForm(instance=article)
-    context = {
-        'article': article,
-        'form': form,
-    }
-    return render(request, 'articles/update.html', context)
-
+    if request.user == article.user:
+        if request.method == "POST":
+            form = ArticleForm(request.POST, request.FILES, instance=article)
+            if form.is_valid():
+                article = form.save()
+                return redirect('articles:detail', article.pk)
+        else:
+            form = ArticleForm(instance=article)
+        context = {
+            'article': article,
+            'form': form,
+        }
+        return render(request, 'articles/update.html', context)
+    return redirect('articles:index')
 
 @require_POST
 def create_comments(request, pk):

@@ -23,7 +23,7 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
-    return redirect(request, 'articles:index')
+    return redirect('articles:index')
 
 def signup(request):
     if request.method == 'POST':

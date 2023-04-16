@@ -7,14 +7,17 @@
   {% if article.image %}
     <img src="{{ article.image.url }}" alt="">
   {% endif %}
+  <p>{{ article.user }}</p>
   <p>{{ article.title }}</p>
   <p>{{ article.content }}</p>
   <hr>
-  <a href="{% url 'articles:update' article.pk %}">수정</a>
-  <form action="{% url 'articles:delete' article.pk %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="삭제">
-  </form>
+  {% if request.user == article.user %}
+    <a href="{% url 'articles:update' article.pk %}">수정</a>
+    <form action="{% url 'articles:delete' article.pk %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="삭제">
+    </form>
+  {% endif %}
 
   <form action="{% url 'articles:create_comments' article.pk %}" method="POST">
     {% csrf_token %}
