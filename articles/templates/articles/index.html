@@ -2,16 +2,16 @@
 {% load static %}
 
 {% block content %}
-<img src="{% static 'imgimg.png' %}" alt="">
-<h1>INDEX PAGE</h1>
-<br>
-<a href="{% url 'articles:create' %}">[글 생성]</a>
-<hr>
-{% for article in articles %}
-  <p>{{ article.pk }}</p>
-  <a href="{% url 'articles:detail' article.pk %}">
-  <p>{{ article.title }}</p>
-  </a>
+  <img src="{% static 'imgimg.png' %}" alt="">
+  <h1>INDEX PAGE</h1>
+  <br>
+  <a href="{% url 'articles:create' %}">[글 생성]</a>
   <hr>
-{% endfor %}
+  {% for article in articles %}
+    <p>{{ article.pk }}</p>
+    <a href="{% url 'articles:detail' article.pk %}">
+      <p>{{ article.title }}</p>
+    </a>
+    <hr>
+  {% endfor %}
 {% endblock content %}

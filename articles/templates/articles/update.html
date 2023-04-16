@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>UPDATE PAGE</h1>
-<form action="{% url 'articles:update' article.pk %}" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="UPDATE">
-  <input type="reset" value="RESET">
-</form>
-<form action="{% url 'articles:detail' article.pk %}">
-  <input type="submit" value="BACK">
-</form>
+  <h1>UPDATE PAGE</h1>
+  <form action="{% url 'articles:update' article.pk %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="UPDATE">
+    <input type="reset" value="RESET">
+  </form>
+  <form action="{% url 'articles:detail' article.pk %}">
+    <input type="submit" value="BACK">
+  </form>
 {% endblock content %}
