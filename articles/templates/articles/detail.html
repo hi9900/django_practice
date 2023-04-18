@@ -19,22 +19,31 @@
     </form>
   {% endif %}
 
-  <form action="{% url 'articles:create_comments' article.pk %}" method="POST">
-    {% csrf_token %}
-    {{ comment_form }}
-    <input type="submit" value="댓글작성">
-  </form>
+  {% if user.is_authenticated %}
+    <form action="{% url 'articles:create_comments' article.pk %}" method="POST">
+      {% csrf_token %}
+      {{ comment_form }}
+      <input type="submit" value="댓글작성">
+    </form>
+  {% else %}
+    댓글을 작성하려면
+    <a href="{% url 'accounts:login' %}">로그인</a>하세요
+  {% endif %}
   {% if comments %}
     <h4>댓글|
       {{ comments.count }}</h4>
   {% endif %}
   <ul>
     {% for comment in comments %}
-      <li>{{ comment.content }}
-        <form action="{% url 'articles:delete_comments' article.pk comment.pk %}" method="POST">
-          {% csrf_token %}
-          <input type="submit" value="댓글 삭제">
-        </form>
+      <li>{{ comment.user }}
+        -
+        {{ comment.content }}
+        {% if comment.user == request.user %}
+          <form action="{% url 'articles:delete_comments' article.pk comment.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="댓글 삭제">
+          </form>
+        {% endif %}
       </li>
       {% empty %}
       <p>댓글이 없어요..</p>

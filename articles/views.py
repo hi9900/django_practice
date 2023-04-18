@@ -69,18 +69,22 @@ def update(request, pk):
         return render(request, 'articles/update.html', context)
     return redirect('articles:index')
 
+@login_required
 @require_POST
 def create_comments(request, pk):
-    article = Article.objects.get(pk=pk)
-    comment_form = CommentForm(request.POST)
-    if comment_form.is_valid():
-        comment = comment_form.save(commit=False)
-        comment.article = article
-        comment.save()
-    return redirect('articles:detail', article.pk)
+    if request.user.is_authenticated:
+        article = Article.objects.get(pk=pk)
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.article = article
+            comment.user = request.user
+            comment.save()
+        return redirect('articles:detail', article.pk)
 
 @require_POST
 def delete_comments(request, article_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
-    comment.delete()
+    if request.user == comment.user:
+        comment.delete()
     return redirect('articles:detail', article_pk)

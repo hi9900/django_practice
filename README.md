@@ -127,4 +127,18 @@ $ python manage.py startapp articles
 
   - 게시글 작성자 표시
 
+## N:1 Comment-User
 
+- Comment 모델에 User모델을 참조하는 외래키 작성 후 마이그레이션
+
+- CRUD
+
+  - C: 댓글 작성 시 회원 정보 저장
+
+  - R: 댓글 작성자 출력
+
+  - D: 작성자 확인 후 댓글 삭제
+
+- 인증된 사용자인 경우에만 댓글 작성 및 삭제
+
+- 비인증 사용자는 CommentForm을 볼 수 없게 처리
