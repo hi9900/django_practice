@@ -159,3 +159,22 @@ $ python manage.py startapp articles
 
 - index 템플릿에서 좋아요 버튼 출력
 
+## M:N User-User
+
+- 프로필 페이지 만들기
+
+  - url, view 함수 작성
+
+  - profile 템플릿 작성
+
+  - 하이퍼링크 달기
+
+- 팔로우 기능 구현
+
+  - 모델 관계 설정 및 Migration
+
+    - 'self', symmetrical=False, related_name='followers'
+
+  - url, view 함수 작성
+
+  - 프로필 페이지에 팔로우, 팔로워 수 및 팔로우 버튼 출력

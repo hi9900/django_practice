@@ -7,7 +7,9 @@
   {% if article.image %}
     <img src="{{ article.image.url }}" alt="">
   {% endif %}
-  <p>{{ article.user }}</p>
+  <p>
+    <a href="{% url 'accounts:profile' article.user.username %}">{{ article.user }}</a>
+  </p>
   <p>{{ article.title }}</p>
   <p>{{ article.content }}</p>
   <hr>
