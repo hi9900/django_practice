@@ -142,3 +142,20 @@ $ python manage.py startapp articles
 - 인증된 사용자인 경우에만 댓글 작성 및 삭제
 
 - 비인증 사용자는 CommentForm을 볼 수 없게 처리
+
+## M:N Article-User
+
+- 좋아요 기능 구현
+
+- Article 모델 클래스에 User모델을 참조하는 like_user 작성 후 마이그레이션
+
+  - related_name: like_articles
+
+- url 및 view함수 작성
+
+  - 이미 좋아요를 했다면, 좋아요 취소
+
+  - 인증된 사용자만 사용 가능
+
+- index 템플릿에서 좋아요 버튼 출력
+

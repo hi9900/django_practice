@@ -12,6 +12,15 @@
     <a href="{% url 'articles:detail' article.pk %}">
       <p>{{ article.title }}</p>
     </a>
-    <hr>
-  {% endfor %}
+    <p>좋아요:
+      {{ article.like_users.count }}</p>
+    <form action="{% url 'articles:likes' article.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in article.like_users.all %}
+        <input type="submit" value="좋아요취소"></form>
+    {% else %}
+      <input type="submit" value="좋아요"></form>
+  {% endif %}
+  <hr>
+{% endfor %}
 {% endblock content %}
