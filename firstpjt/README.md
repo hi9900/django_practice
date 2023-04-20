@@ -178,3 +178,36 @@ $ python manage.py startapp articles
   - url, view 함수 작성
 
   - 프로필 페이지에 팔로우, 팔로워 수 및 팔로우 버튼 출력
+
+---
+
+## django seed - 안됨: 아마도 앱 관계있어서
+
+랜덤으로 데이터를 데이터베이스에 만들어 줌
+
+1. django-seed 설치
+
+```bash
+$ pip install django-seed
+$ pip freeze > requirements.txt
+```
+
+2. settings.py INSTALLED_APPS 추가
+
+```python
+# settings.py
+INSTALLED_APPS = [ ...,
+    'django_seed', ... ] 
+```
+
+3. 데이터 채우기
+```bash
+$ python manage.py seed [app_name] --number=[채울 데이터 숫자]
+```
+
+3-1. `No module named 'psycopg2'` 에러 시 psycopg2 설치후 재시도
+
+```bash
+$ pip install psycopg2
+$ pip freeze > requirements.txt
+```
