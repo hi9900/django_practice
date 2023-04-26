@@ -7,6 +7,8 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
 from django.contrib.auth import get_user_model
 
+from django.http import JsonResponse
+
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 
@@ -119,8 +121,16 @@ def follow(request, user_pk):
         if me != you:
             if you.followers.filter(pk=me.pk).exists():
                 you.followers.remove(me)
+                is_followed = False
             else:
                 you.followers.add(me)
+                is_followed = True
+            context = {
+                'is_followed': is_followed,
+                'followers_count' : you.followers.count(),
+                'followings_count' : you.followings.count(),
+            }
+            return JsonResponse(context)
         return redirect('accounts:profile', you.username)
     return redirect('accounts:login')
 
