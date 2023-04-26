@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods, require_POST, require_safe
 from django.contrib.auth.decorators import login_required
 # from django.http import HttpResponse, HttpResponseForbidden
+from django.http import JsonResponse
+
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 
@@ -117,8 +119,14 @@ def likes(request, article_pk):
         article = Article.objects.get(pk=article_pk)
         if article.like_users.filter(pk=request.user.pk).exists():
             article.like_users.remove(request.user)
+            is_liked = False
         else:
             article.like_users.add(request.user)
-        return redirect('articles:index')
+            is_liked = True
+        context = {
+            'is_liked': is_liked,
+            'like_count': article.like_users.count(),
+        }
+        return JsonResponse(context)
     return redirect('accounts:login')
     
