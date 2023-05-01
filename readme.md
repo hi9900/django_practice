@@ -7,3 +7,5 @@ my_api: postman RESTful 연습
 json_response_template: postman RESTful 연습2
 
 template: javascript AJAX로 좋아요, 팔로우 구현
+
+auth_template: auth 추가 구현 연습

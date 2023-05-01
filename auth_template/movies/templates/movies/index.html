@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block style %}
+<style>
+  h1 {
+     text-align: center;
+     font-size: 2rem;
+     font-weight: bold;
+     margin-top: 2rem;
+     margin-bottom: 2rem;
+  }
+  </style>
+{% endblock style %}
+
+{% block content %}
+  <h1>Movies</h1>
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+    {% for movie in movies %}
+      <div class="col">
+        <div class="card h-100 " style="max-width: 360px;">
+          <a href="{% url 'movies:detail' movie.pk %}" style="text-decoration: none;">
+      <!-- style="object-fit: cover; 이미지 비율을 유지하면서 이미지를 자동으로 조정하도록 설정-->
+          <img class="card-img-top" src="{{ movie.poster_path }}" alt="{{ movie.title }} poster" style="height: 350px; object-fit: contain;">
+          <div class="card-body text-center">
+            <h5 class="card-title font-weight-bold text-dark" style="word-break: keep-all;">{{ movie.title }}</h5>
+            <p class="card-text">{{ movie.description }}</p>
+          </div>
+        </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if movies.has_other_pages %}
+  <nav aria-label="Page navigation" class="mt-4 d-flex justify-content-center">
+    <ul class="pagination">
+      {% if movies.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1" aria-label="First"><span aria-hidden="true">&laquo;</span></a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ movies.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&lt;</span></a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link" aria-label="First"><span aria-hidden="true">&laquo;</span></span></li>
+        <li class="page-item disabled"><span class="page-link" aria-label="Previous"><span aria-hidden="true">&lt;</span></span></li>
+      {% endif %}
+      {% for num in movies.paginator.page_range %}
+        {% if movies.number == num %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% elif num > movies.number|add:'-3' and num < movies.number|add:'3' %}
+          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if movies.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ movies.next_page_number }}" aria-label="Next"><span aria-hidden="true">&gt;</span></a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ movies.paginator.last_page_number }}" aria-label="Last"><span aria-hidden="true">&raquo;</span></a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link" aria-label="Next"><span aria-hidden="true">&gt;</span></span></li>
+        <li class="page-item disabled"><span class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;</span></span></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+  
+{% endblock %}
