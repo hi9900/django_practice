@@ -41,7 +41,35 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # allauth
+    'django.contrib.sites', # <- 의존성 앱
+    'allauth', # <- 추가
+    'allauth.account', # <- 추가
+    'allauth.socialaccount', # <- 추가
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # <- 디폴트 모델 백엔드
+    'allauth.account.auth_backends.AuthenticationBackend', # <- 추가
+)
+
+SITE_ID = 1 # 사이트 아이디 기본값
+
+ACCOUNT_SIGNUP_REDIRECT_URL = "movies:index"
+LOGIN_REDIRECT_URL = "movies:index"
+# 터미널 콘솔로 이메일 보내기 (변경해야함)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# email로 로그인
+ACCOUNT_AUTHENTICATION_METHOD = 'email'     # 로그인 시 email 사용
+ACCOUNT_EMAIL_REQUIRED = True   # email 필수
+ACCOUNT_EMAIL_VERIFICATION = 'optional'     # 회원가입 email 인증
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True     # 링크 클릭하면 인증완료
+ACCOUNT_USERNAME_REQUIRED = False   # username 필수제거
+
+# 수정한 form 사용
+ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.SignupForm'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,19 +117,13 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {   # 커스텀 유효성 검사
+        "NAME": "accounts.validators.CustomPasswordValidator",
+    }
 ]
+
+# 유효성검사 통과 못할때 비밀번호 지워짐 방지
+ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = True
 
 
 # Internationalization

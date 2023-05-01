@@ -11,19 +11,23 @@
   <div class="container">
     <nav>
       {% if user.is_authenticated %}
-      <h3>Hello, {{ user.username }}</h3>
-      <a href="{% url 'accounts:profile' user %}">내 프로필</a>
-      <form action="{% url 'accounts:logout' %}" method="POST">
+      <h3>Hello, {{ user.nickname }}</h3>
+      {% comment %} <a href="{% url 'accounts:profile' user %}">내 프로필</a> {% endcomment %}
+      <form method="post" action="{% url 'account_logout' %}">
         {% csrf_token %}
-        <input type="submit" value="Logout">
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button type="submit">Logout</button>
+      </form>
       </form>
       <a href="{% url 'movies:index'%}">Movie</a>
       <a href="{% url 'community:index'%}">Community</a>
       <a href="{% url 'community:create'%}">New Review</a>
       <a href="{% url 'movies:recommended' %}">Recommended</a>
       {% else %}
-      <a href="{% url 'accounts:signup' %}">Signup</a>
-      <a href="{% url 'accounts:login' %}">Login</a>
+      <a href="{% url 'account_signup' %}">Signup</a>
+      <a href="{% url 'account_login' %}">Login</a>
       {% endif %}
     </nav>
     {% block content %}
